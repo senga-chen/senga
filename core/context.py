@@ -50,6 +50,10 @@ class __ApplicationContext():
     def mysql_pool(self):
         return self.__mysql_pools
 
+    @property
+    def config(self):
+        return self.__config
+
 
 senga_app = __ApplicationContext()
 

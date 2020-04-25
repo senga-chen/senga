@@ -21,7 +21,7 @@ class MessageHandler(DefaultHandler):
         if not args:
             return
         message = args.get("message", "")
-        ret = yield senga_app.service("MessageService").send_message(message)
+        ret = yield senga_app.service("MessageService").single_message(1, 2, message)
 
 
 if __name__ == "__main__":

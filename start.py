@@ -15,10 +15,7 @@ from tornado.options import define, options
 
 from common import cmd
 from core.context import senga_app
-from handlers.chatHandler import ChatSocketHandler
-from handlers.indexHandler import MainHandler
-from handlers.messageHandler import MessageHandler
-from handlers.userHandler import UserHandler
+from core.rounting import handler_store
 
 define("port", default=8080, type=int)
 
@@ -33,15 +30,13 @@ class SengaApp():
         senga_app.mysql_setup(**self.config.get("mysql"))
         senga_app.autoload_models(self)
 
+        from core.message_client import PikaProducerExector
+        PikaProducerExector.instance()
+
 
 def main():
     tornado.options.parse_command_line()
-    handlers = [
-        (r'/', MainHandler),
-        (r'/chatsocket', ChatSocketHandler),
-        (r'/message', MessageHandler),
-        (r'/userinfo', UserHandler),
-    ]
+    handlers = handler_store()
     settings = dict(
         template_path="templates",
         static_path="statics",
