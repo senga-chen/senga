@@ -7,48 +7,43 @@
 
 """
 import logging
-
-import tornado.escape
 import tornado.websocket
-import uuid
+from tornado import gen
+from core.context import senga_app
+from core.socket_client_manage import WebSocketUser
 
 
 class ChatSocketHandler(tornado.websocket.WebSocketHandler):
-    waiters = set()
-    cache = []
-    cache_size = 200
+    def __init__(self, application, request, **kwargs):
+        super(ChatSocketHandler, self).__init__(application, request, **kwargs)
+        self.web_socket_user = None
+        self.opened = False
 
     def open(self, *args, **kwargs):
-        ChatSocketHandler.waiters.add(self)
+        user = self.init_user()
+        user.set_user_client(self)
+        self.web_socket_user = user
+        self.application.socket_client_manger.register_client(user)
 
     def on_close(self):
-        ChatSocketHandler.waiters.remove(self)
+        self.opened = False
 
-    @classmethod
-    def send_updates(cls, chat):
-        logging.info("send message ===> %s" % chat)
-        for waiter in cls.waiters:
-            try:
-                waiter.write_message(chat)
-            except Exception, e:
-                logging.error("error send message")
+    def init_user(self):
+        # token = "token" in self.request.arguments and self.request.arguments["token"][0] or ""
+        # if token:
+            # operator_id = senga_app.redis.get("token:%s" % token)
+        operator_id = 1
+        if operator_id:
+            self.opened = True
+            return WebSocketUser(operator_id)
+        else:
+            return None
 
-    @classmethod
-    def update_cache(cls, chat):
-        cls.cache.append(chat)
-        if len(cls.cache) > cls.cache_size:
-            cls.cache = cls.cache[-cls.cache_size:]
-
+    @gen.coroutine
     def on_message(self, message):
         logging.info("get message ==> %s" % message)
-        parsed = tornado.escape.json_decode(message)
-        chat = {
-            "id": str(uuid.uuid4()),
-            "body": parsed.get("body")
-        }
-        chat["html"] = tornado.escape.to_basestring(self.render_string("message.html", message=chat))
-        ChatSocketHandler.update_cache(chat)
-        ChatSocketHandler.send_updates(chat)
+        self.web_socket_user.ping_active()
+        yield senga_app.service("MessageService").single_message(1, 2, message)
 
 
 if __name__ == "__main__":

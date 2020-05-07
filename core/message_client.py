@@ -119,7 +119,7 @@ class CommonPikaProducer(object):
     def queue_declare_ok(self, unused_frame):
         pass
 
-    def on_queue_bindok(self):
+    def on_queue_bindok(self, unused_frame):
         pass
 
     def publish_message(self, quname, message, expiration=None, exchange="", routing_key=None):

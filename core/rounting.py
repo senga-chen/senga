@@ -9,15 +9,16 @@
 from handlers.chatHandler import ChatSocketHandler
 from handlers.indexHandler import MainHandler
 from handlers.messageHandler import MessageHandler
-from handlers.userHandler import UserHandler
+from handlers.userHandler import UserHandler, LoginHandler
 
 
 def handler_store():
     handlers = [
         (r'/', MainHandler),
         (r'/chatsocket', ChatSocketHandler),
-        (r'/message', MessageHandler),
-        (r'/userinfo', UserHandler),
+        (r'/api/message', MessageHandler),
+        (r'/api/user/user_info', UserHandler),
+        (r'/api/user/login', LoginHandler),
     ]
     return handlers
 
