@@ -23,7 +23,7 @@ class MessageBox(object):
 
     def add_message(self, msg):
         if self.mq_type == "single":
-            self.target_user_id = msg.target_user.get("id", 0)
+            self.target_user_id = msg.target_user.user.get("id", 0)
         self.body = ujson.dumps(msg, ensure_ascii=False)
         return self
 

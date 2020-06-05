@@ -74,7 +74,7 @@ class CommonPikaProducer(object):
         self.conn.add_on_close_callback(self.on_connection_closed)
         self.conn.channel(on_open_callback=self.on_channel_open)
 
-    def on_open_error_callback(self):
+    def on_open_error_callback(self, connection, str):
         self.conn.add_timeout(5, self.reconnect)
 
     def on_channel_open(self, channel):
@@ -92,7 +92,7 @@ class CommonPikaProducer(object):
         if self.conn.is_open:
             self.conn.close()
 
-    def on_connection_closed(self):
+    def on_connection_closed(self, connection, reply_code, reply_text):
         self.channel = None
         self.conn.add_timeout(5, self.reconnect)
 

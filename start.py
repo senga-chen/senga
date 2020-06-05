@@ -55,7 +55,7 @@ def main():
         handlers = handler_store()
         settings = dict(
             template_path=os.path.join(os.path.dirname(__file__), "templates"),
-            static_path=os.path.join(os.path.dirname(__file__), "statics"),
+            static_path=os.path.join(os.path.dirname(__file__), "static"),
             debug=config.get("debug", False),
             cookie_secret=config.get("secert_key", None)
         )

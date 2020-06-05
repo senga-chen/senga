@@ -20,8 +20,8 @@ class MessageService(BaseService):
     @gen.coroutine
     def single_message(self, from_id, target_id, message):
         msg_body = TextMsg()
-        from_user = yield senga_app.service("UserService").userinfo(from_id)
-        target_user = yield self.content.service("UserService").userinfo(target_id)
+        from_user = yield senga_app.service("UserService").user_info(from_id)
+        target_user = yield self.content.service("UserService").user_info(target_id)
         msg_body.add_user(from_user=from_user, target_user=target_user)
         msg_body.add_content(desc=message)
         msg = MessageBox(action="single_msg").add_message(msg_body)

@@ -63,14 +63,15 @@
             }else {
               // console.log(response)
               let username = response.user.name;
-              let token = response.token;
+              let token = response.user.token;
               let cover = response.user.cover;
               let user_id = response.user.id;
               if (!cover){
                 cover = "http://s1.wmlives.com/data/dongci/user_cover/20180503155855170276.jpg!cover_img_thumbnail"
               }
               let attributes = {};
-              attributes.expires = 1/24;
+              attributes.expires = 1;
+              console.log(attributes)
               Cookies.set('user_id', user_id, attributes);
               Cookies.set('user', username, attributes);
               Cookies.set('token', token, attributes);

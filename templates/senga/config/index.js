@@ -46,10 +46,10 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../../../statics/senga/index.html'),
+    index: path.resolve(__dirname, '../../../static/index.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../../../statics/senga'),
+    assetsRoot: path.resolve(__dirname, '../../../'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
 
